@@ -17,16 +17,16 @@ function modalMensagem(msg){
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" style="color:white" id="TituloModalCentralizado">Mensagem</h5>
+        <h5 class="modal-title" style="color:dark" id="TituloModalCentralizado">Atenção</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <span style="color:white" id="mensagemModal"></span>
+        <span style="color:dark" id="mensagemModal"></span>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
       </div>
     </div>
   </div>

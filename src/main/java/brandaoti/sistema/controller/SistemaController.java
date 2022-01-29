@@ -285,7 +285,7 @@ public class SistemaController extends HttpServlet {
 			itemMenu = link;
 			 //JSP que irÃ¡ acessar
 			if(!senhaIncorreta.equals("")) {
-				request.setAttribute("senhaIncorreta", senhaIncorreta);
+				request.setAttribute("mensagem", senhaIncorreta);
 				senhaIncorreta = "";
 			}
 			session.setAttribute("mesSelecionado", mesSelecionado);
@@ -542,6 +542,8 @@ public class SistemaController extends HttpServlet {
 					paginaAtual = "Consulta";
 					iconePaginaAtual = "fa fa-cogs"; //Titulo do menuzinho.
 					consultas = consultaDao.buscarMinhaAgendaOrdenadaData(usuarioSessao.getId());
+				} else {
+					request.setAttribute("mensagem", "Usuário(a) / Senha incorreto(s).");
 				}
 			}
 			if((usuarioSessao != null && usuarioSessao.getId() != null) || logado) {
@@ -571,7 +573,8 @@ public class SistemaController extends HttpServlet {
 				
 			} else {
 				logado=false;
-				link = "pages/deslogar"; 
+				link = "index"; 
+				request.setAttribute("mensagem", "Usuário(a) / Senha incorreto(s).");
 			}
 			 //JSP que irá acessar.
 			request.setAttribute("confirmada", confirmada);
@@ -584,8 +587,8 @@ public class SistemaController extends HttpServlet {
 			request.setAttribute("iconePaginaAtual", iconePaginaAtual);
 			if(!logado) {
 				String senhaIncorreta = "Usuário / Senha incorretos!";
-				request.setAttribute("senhaIncorreta", senhaIncorreta);
-				link = "pages/deslogar"; 
+				request.setAttribute("mensagem", senhaIncorreta);
+				link = "index"; 
 			}
 			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
 		}

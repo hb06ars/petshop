@@ -8,7 +8,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="shortcut icon" href="/assets/images/calendario.png">
-        <title>Atendimento</title>
+        <title>PetShop</title>
         <!--calendar css-->
         <link href="/assets/plugins/fullcalendar/css/fullcalendar.min.css" rel="stylesheet" />
         <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
