@@ -102,18 +102,16 @@
                     <div id="sidebar-menu">
                         <ul>
 							<li class="has_sub">
-                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-search">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-book">
                                 	</i><span>Agenda </span> <span class="menu-arrow"></span>
                                 </a>
                                 <ul>
-                                    <li>
-                                        <a href="/agendamento"><span>Marcar Serviço</span></a>
-                                    </li>
-                                    <c:if test="${usuarioSessao.perfil.funcionario }">
-	                                    <li>
-	                                        <a href="/minhaAgenda"><span>Minha Agenda</span></a>
-	                                    </li>
-                                    </c:if>
+                                	<li>
+										<a href="/agendamento"><span>Marcar Serviço</span></a>
+									</li>
+	                                <li>
+	                                	<a href="/minhaAgenda"><span>Minha Agenda</span></a>
+									</li>
                                 </ul>
                             </li>
                             
@@ -124,10 +122,10 @@
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="/agendamento"><span>Meu Registro</span></a>
+                                        <a href="/meu_registro"><span>Meu Registro</span></a>
                                     </li>
                                     <li>
-                                        <a href="/agendamento"><span>Meus Pets</span></a>
+                                        <a href="/meus_pets"><span>Meus Pets</span></a>
                                     </li>
                                 </ul>
                             </li>
@@ -141,6 +139,9 @@
 	                                <ul>
 	                                    <li>
 	                                        <a href="/clientes"><span>Clientes</span></a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="/pets"><span>Pets</span></a>
 	                                    </li>
 	                                    <li>
 	                                        <a href="/funcionarios"><span>Funcionários</span></a>

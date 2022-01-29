@@ -104,7 +104,7 @@ public class SistemaController extends HttpServlet {
 			anoSelecionado = calendar.get(Calendar.YEAR);
 		}
 		
-		@RequestMapping(value = {"/","/login"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.GET) // Pagina de Vendas
+		@RequestMapping(value = {"/","/index"}, produces = "text/plain;charset=UTF-8", method = RequestMethod.GET) // Pagina de Vendas
 		public void login(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "nome", required = false, defaultValue = "Henrique Brandão") String nome) throws SQLException, ServletException, IOException { //Funcao e alguns valores que recebe...
 			//Caso não haja registros
 			HttpSession session = request.getSession();
@@ -258,8 +258,21 @@ public class SistemaController extends HttpServlet {
 				pet.setVacina(listaVacina);
 				petDao.save(pet);
 				
+				Pet pet2 = new Pet();
+				pet2.setCastracao(true);
+				pet2.setEspecie("Cachorro");
+				pet2.setGenero("Feminino");
+				pet2.setNome("Mel");
+				pet2.setObservacoes("Solta muito pêlo");
+				pet2.setPeso(11.0);
+				pet2.setRaca("Desconhecido");
+				pet2.setNascimento(LocalDateTime.of(2008, 8, 10, 0, 0));
+				pet2.setVacina(listaVacina);
+				petDao.save(pet2);
+				
 				List<Pet> listaPet = new ArrayList<Pet>();
 				listaPet.add(pet);
+				listaPet.add(pet2);
 				
 				d.setPet(listaPet);
 				
@@ -318,6 +331,9 @@ public class SistemaController extends HttpServlet {
 			session.setAttribute("mesSelecionado", mesSelecionado);
 			session.setAttribute("anoSelecionado", anoSelecionado);
 			
+			if(session.getAttribute("usuarioSessao") != null) {
+				link = "pages/home";
+			}
 			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
 		}
 		
@@ -1269,7 +1285,85 @@ public class SistemaController extends HttpServlet {
 		
 		
 		
-		
+		@RequestMapping(value = "/meu_registro", produces = "text/plain;charset=UTF-8", method = {RequestMethod.GET,RequestMethod.POST}) // Pagina de Vendas
+		public void meu_registro(HttpServletRequest request, HttpServletResponse response, Usuario funcionario, String acao, String perfil_codigo, String grupo_codigo) throws SQLException, ServletException, IOException {
+			String paginaAtual = "Funcionários";
+			String iconePaginaAtual = "fa fa-user"; //Titulo do menuzinho.
+			String link = "pages/meu_registro";
+			String itemMenu = link;
+			HttpSession session = request.getSession();
+			String atualizarPagina = "";
+			Usuario usuarioSessao = new Usuario();
+			Boolean logado = false;
+			if(session.getAttribute("logado") != null) {
+				logado = (Boolean) session.getAttribute("logado");
+			}
+			if(session.getAttribute("usuarioSessao") != null) {
+				usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
+			}
+			 //JSP que irá acessar.
+			request.setAttribute("usuario", usuarioSessao);
+			request.setAttribute("paginaAtual", paginaAtual); 
+			request.setAttribute("iconePaginaAtual", iconePaginaAtual);
+			if(logado) {
+				//Gerando matrícula aleatória
+				String matriculaPadrao = gerarMatricula(usuarioSessao);
+				request.setAttribute("matriculaPadrao", matriculaPadrao);
+				
+				Boolean repetido = false;
+				if(usuarioDao.buscarFuncionariosRepetidos(funcionario.getMatricula(), funcionario.getCpf()).size() > 0) {
+					repetido = true;
+				}
+				if(funcionario.getMatricula() != null && (acao.equals("salvar")) && !repetido) {
+					try {
+						atualizarPagina = "/funcionarios";
+						Usuario a = new Usuario();
+						a = funcionario;
+						a.setSenha(funcionario.getCpf().replace(".", "").replace("-", ""));
+						if(usuarioSessao.getPerfil().getAdmin()) {
+							a.setPerfil(perfilDao.buscarCodigo(perfil_codigo));
+						} else {
+							a.setPerfil(perfilDao.buscarFuncionario().get(0));
+						}
+						usuarioDao.save(a);
+						String msg = "Solicitação confirmada com sucesso!";
+						request.setAttribute("mensagem", msg);
+						request.setAttribute("tipoMensagem", "info");
+					} catch(Exception e) {
+						request.setAttribute("erro", e);
+						System.out.println("Erro: "+e);
+					}
+				} else if (funcionario.getMatricula() != null && (acao.equals("atualizar")) && repetido){
+					Usuario a = usuarioDao.findById(usuarioSessao.getId()).get();
+					a.setNome(funcionario.getNome());
+					a.setDataNascimento(funcionario.getDataNascimento());
+					a.setTelefone(funcionario.getTelefone());
+					a.setCelular(funcionario.getCelular());
+					a.setEndereco(funcionario.getEndereco());
+					a.setEmail(funcionario.getEmail());
+					a.setPathImagem(funcionario.getPathImagem());
+					a.setCep(funcionario.getCep());
+					a.setBairro(funcionario.getBairro());
+					a.setCidade(funcionario.getCidade());
+					a.setEstado(funcionario.getEstado());
+					a.setPerfil(perfilDao.buscarCodigo(perfil_codigo));
+					usuarioDao.save(a);
+					String msg = "Atualização confirmada com sucesso!";
+					request.setAttribute("mensagem", msg);
+					request.setAttribute("tipoMensagem", "info");
+				} else if(funcionario.getMatricula() != null && (acao.equals("salvar")) && repetido) {
+					request.setAttribute("mensagem", "Já existe este CPF / Matrícula.");
+					request.setAttribute("tipoMensagem", "erro");    
+				}
+				List<Usuario> usuarios = usuarioDao.buscarFuncionarios();
+				request.setAttribute("usuarios", usuarios);
+				
+				List<Preco> grupos = precoDao.buscarTudo();
+				request.setAttribute("grupos", grupos);
+				
+			}
+			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
+		}
 		
 		
 		

@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -38,14 +40,16 @@ public class Pet {
 	@Column
 	private LocalDateTime nascimento = LocalDateTime.now(); 
 	
-	@OneToMany
+	@ManyToMany
+	(fetch = FetchType.LAZY)
 	private List<Vacina> vacina;
 	
 	@OneToMany
+	(fetch = FetchType.LAZY)
 	private List<Usuario> responsaveis;
 	
 	@Column
-	private String pathImagem = "/assets/images/avatar-1.png";
+	private String pathImagem = "/assets/images/avatar-1.jpg";
 	
 	@Column
 	private String observacoes;
