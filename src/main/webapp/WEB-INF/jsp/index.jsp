@@ -38,7 +38,7 @@ function iniciando(){
 	<div class="limiter">
 		<div class="container-login100">
 			<div style="padding-top:0px" class="wrap-login100">
-				<form style="padding-top:40px" class="login100-form validate-form" action="/home" method="post" accept-charset="utf-8">
+				<form style="padding-top:40px" class="login100-form validate-form" action="/" method="post" accept-charset="utf-8">
 					<span class="login100-form-title p-b-43">
 						<span class="h1">PETSHOP</span><br>
 						<span style="max-width:50px">

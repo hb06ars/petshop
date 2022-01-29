@@ -31,13 +31,17 @@ import org.springframework.web.multipart.MultipartFile;
 import brandaoti.sistema.dao.AssuntoDao;
 import brandaoti.sistema.dao.ConsultaDao;
 import brandaoti.sistema.dao.PerfilDao;
+import brandaoti.sistema.dao.PetDao;
 import brandaoti.sistema.dao.PrecoDao;
 import brandaoti.sistema.dao.UsuarioDao;
+import brandaoti.sistema.dao.VacinaDao;
 import brandaoti.sistema.model.Assunto;
 import brandaoti.sistema.model.Consulta;
 import brandaoti.sistema.model.Perfil;
+import brandaoti.sistema.model.Pet;
 import brandaoti.sistema.model.Preco;
 import brandaoti.sistema.model.Usuario;
+import brandaoti.sistema.model.Vacina;
 
 
 @RestController
@@ -56,17 +60,10 @@ public class SistemaController extends HttpServlet {
 		private AssuntoDao assuntoDao;
 		@Autowired
 		private ConsultaDao consultaDao;
-		
-		//public static Usuario usuarioSessao;
-		//public static String atualizarPagina = null;
-		//public static Boolean logado = false;
-		//public static String itemMenu = "home";
-		//public static String paginaAtual = "Dashboard";
-		//public static String iconePaginaAtual = "fa fa-home";
-		//public static Integer mesSelecionado;
-		//public static Integer anoSelecionado;
-		//public static String senhaIncorreta = "";
-		
+		@Autowired
+		private VacinaDao vacinaDao;
+		@Autowired
+		private PetDao petDao;
 		
 		public String gerarChamado(Usuario usuarioSessao) {
 			Random gerador = new Random();
@@ -178,25 +175,25 @@ public class SistemaController extends HttpServlet {
 			if(pl == null || pl.size() == 0) {
 				Preco pr = new Preco();
 				pr.setCodigo("1");
-				pr.setNome("Progressiva");
+				pr.setNome("Banho");
 				pr.setPreco(99.99);
 				pr.setAtivo(true);
 				precoDao.save(pr);
 				pr = new Preco();
 				pr.setCodigo("2");
-				pr.setNome("Unha");
+				pr.setNome("Tosa");
 				pr.setAtivo(true);
 				pr.setPreco(99.99);
 				precoDao.save(pr);
 				pr = new Preco();
 				pr.setCodigo("3");
-				pr.setNome("Pé");
+				pr.setNome("Vacina");
 				pr.setAtivo(true);
 				pr.setPreco(99.99);
 				precoDao.save(pr);
 				pr = new Preco();
 				pr.setCodigo("4");
-				pr.setNome("Mão");
+				pr.setNome("Banho e Tosa");
 				pr.setAtivo(true);
 				pr.setPreco(99.99);
 				precoDao.save(pr);
@@ -230,7 +227,7 @@ public class SistemaController extends HttpServlet {
 				d.setCpf("11122233344");
 				d.setEmail("teste@teste.com");
 				d.setSenha("123");
-				d.setNome("Douglas");
+				d.setNome("Mah");
 				d.setTelefone("(11)99999-9999");
 				d.setCelular("(11)99999-9999");
 				d.setEndereco("Teste...");
@@ -239,10 +236,40 @@ public class SistemaController extends HttpServlet {
 				d.setCidade("São Paulo");
 				d.setEstado("SP");
 				d.setDataNascimento(LocalDate.now());
-				d.setPerfil(perfilDao.buscarFuncionario().get(0));
+				d.setPerfil(perfilDao.buscarCliente().get(0));
 				d.setPathImagem("https://instagram.fcgh11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/121259006_145932033910851_5986443377023843247_n.jpg?_nc_ht=instagram.fcgh11-1.fna.fbcdn.net&_nc_ohc=K7QuPMx_HTsAX9F8mer&tp=1&oh=4f66c284e537eb8c6a37a16ecfa2d339&oe=605329B4");
-				usuarioDao.save(d);
 				
+				Vacina vac = new Vacina();
+				vac.setNome("Raiva");
+				vacinaDao.save(vac);
+				
+				List<Vacina> listaVacina = new ArrayList<Vacina>();
+				listaVacina.add(vac);
+				
+				Pet pet = new Pet();
+				pet.setCastracao(true);
+				pet.setEspecie("Cachorro");
+				pet.setGenero("Masculino");
+				pet.setNome("Max");
+				pet.setObservacoes("Fez cirurgia no olho");
+				pet.setPeso(11.0);
+				pet.setRaca("Lhasa");
+				pet.setNascimento(LocalDateTime.of(2008, 8, 10, 0, 0));
+				pet.setVacina(listaVacina);
+				petDao.save(pet);
+				
+				List<Pet> listaPet = new ArrayList<Pet>();
+				listaPet.add(pet);
+				
+				d.setPet(listaPet);
+				
+				usuarioDao.save(d);	
+				
+				List<Usuario> listaResponsaveis = new ArrayList<Usuario>();
+				listaResponsaveis.add(d);
+				
+				pet.setResponsaveis(listaResponsaveis);
+				usuarioDao.save(d);
 				// Rafael
 				Usuario r = new Usuario();
 				r.setAtivo(true);
@@ -510,7 +537,7 @@ public class SistemaController extends HttpServlet {
 		}
 		
 		
-		@RequestMapping(value = "/home", produces = "text/plain;charset=UTF-8", method = {RequestMethod.GET,RequestMethod.POST}) // Pagina de Vendas
+		@RequestMapping(value = {"/","/index"}, produces = "text/plain;charset=UTF-8", method = {RequestMethod.POST}) // Pagina de Vendas
 		public void home(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "usuarioVal", defaultValue = "") String usuarioVal, @RequestParam(value = "senhaVal", defaultValue = "") String senhaVal) throws SQLException, ServletException, IOException {
 			String link = "home";
 			List<Consulta> consultas = new ArrayList<Consulta>();

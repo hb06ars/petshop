@@ -33,10 +33,12 @@ function redirecionar(link){
                     <div class="container">
 
                         <!-- Page-Title -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                               <h4 class="page-title">Atendimento de Clientes</h4>
-                                <p class="text-muted page-title-alt">Olá ${usuario.nome }! Gerencie as reservas de consultas de seus clientes!</p>
+                        <div class="row" >
+                            <div class="col-sm-2 text-left" style="padding-bottom:10px; ">
+                            	<img style="max-width:100px; border-radius: 50%;" src="assets/images/avatar-1.jpg">
+                            </div>
+                            <div class="col-sm-9 text-left">
+                                <h1> Olá ${usuarioSessao.nome }!</h1>
                             </div>
                         </div>
 

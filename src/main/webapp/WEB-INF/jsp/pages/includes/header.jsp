@@ -109,28 +109,48 @@
                                     <li>
                                         <a href="/agendamento"><span>Marcar Serviço</span></a>
                                     </li>
-                                    <li>
-                                        <a href="/minhaAgenda"><span>Minha Agenda</span></a>
-                                    </li>
+                                    <c:if test="${usuarioSessao.perfil.funcionario }">
+	                                    <li>
+	                                        <a href="/minhaAgenda"><span>Minha Agenda</span></a>
+	                                    </li>
+                                    </c:if>
                                 </ul>
                             </li>
                             
-                            <li class="has_sub">
-                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-user">
-                                	</i><span>Cadastro </span> <span class="menu-arrow"></span>
+                            <c:if test="${usuarioSessao.perfil.cliente }">
+                            	<li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-search">
+                                	</i><span>Meus Dados </span> <span class="menu-arrow"></span>
                                 </a>
                                 <ul>
                                     <li>
-                                        <a href="/clientes"><span>Clientes</span></a>
+                                        <a href="/agendamento"><span>Meu Registro</span></a>
                                     </li>
                                     <li>
-                                        <a href="/funcionarios"><span>Funcionários</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="/precos"><span>Preços</span></a>
+                                        <a href="/agendamento"><span>Meus Pets</span></a>
                                     </li>
                                 </ul>
                             </li>
+                            </c:if>
+                            
+                            <c:if test="${usuarioSessao.perfil.funcionario }">
+	                            <li class="has_sub">
+	                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-user">
+	                                	</i><span>Cadastro </span> <span class="menu-arrow"></span>
+	                                </a>
+	                                <ul>
+	                                    <li>
+	                                        <a href="/clientes"><span>Clientes</span></a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="/funcionarios"><span>Funcionários</span></a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="/precos"><span>Preços</span></a>
+	                                    </li>
+	                                </ul>
+	                            </li>
+                            </c:if>
                             
                             <li class="has_sub">
                             	<a href="/alterarSenha" class="waves-effect"><i class="ti-key"></i>

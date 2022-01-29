@@ -2,12 +2,14 @@ package brandaoti.sistema.model;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -72,6 +74,9 @@ public class Usuario {
 	
 	@Column
 	private Date dataDeCadastro = new Date();
+	
+	@OneToMany
+	private List<Pet> pet;
 
 	public Integer getId() {
 		return id;
@@ -224,6 +229,15 @@ public class Usuario {
 	public void setDataDeCadastro(Date dataDeCadastro) {
 		this.dataDeCadastro = dataDeCadastro;
 	}
+
+	public List<Pet> getPet() {
+		return pet;
+	}
+
+	public void setPet(List<Pet> pet) {
+		this.pet = pet;
+	}
+
 	
 	
 	
