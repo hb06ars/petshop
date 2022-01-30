@@ -15,23 +15,13 @@
 function redirecionar(link){
 	window.location.href=link;
 }
-
-
-
-
-
-
 </script>
 <!-- Script -->
-			
 									    	
 <!-- start: page -->
-
-
                 <!-- Start content -->
                 <div class="content">
                     <div class="container">
-
                         <!-- Page-Title -->
                         <div class="row" >
                             <div class="col-sm-2 text-left" style="padding-bottom:10px; ">
@@ -43,7 +33,7 @@ function redirecionar(link){
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 col-lg-3">
+                            <div class="col-md-6 col-lg-3" onclick="redirecionar('/minhaAgenda')" style="cursor:pointer">
                                 <div class="widget-bg-color-icon card-box fadeInDown animated">
                                     <div class="bg-icon bg-icon-primary pull-left">
                                         <i class="md md-thumb-up text-primary"></i>
@@ -53,7 +43,7 @@ function redirecionar(link){
                                         <c:if test="${confirmada > 0 }">
                                         	<p class="text-muted">${confirmada}</p>
                                         </c:if>
-                                        <c:if test="${confirmada == null }">
+                                        <c:if test="${confirmada == null || confirmada == 0 }">
                                         	<p class="text-muted">Nenhuma</p>
                                         </c:if>
                                     </div>
@@ -61,7 +51,7 @@ function redirecionar(link){
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-3">
+                            <div class="col-md-6 col-lg-3" onclick="redirecionar('/minhaAgenda')" style="cursor:pointer">
                                 <div class="widget-bg-color-icon card-box">
                                     <div class="bg-icon bg-icon-pink pull-left">
                                         <i class="md  md-thumb-down text-pink"></i>
@@ -71,7 +61,7 @@ function redirecionar(link){
                                         <c:if test="${recusada > 0 }">
                                         	<p class="text-muted">${recusada}</p>
                                         </c:if>
-                                        <c:if test="${recusada == null }">
+                                        <c:if test="${recusada == null || recusada == 0}">
                                         	<p class="text-muted">Nenhuma</p>
                                         </c:if>
                                     </div>
@@ -79,7 +69,7 @@ function redirecionar(link){
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-3">
+                            <div class="col-md-6 col-lg-3" onclick="redirecionar('/minhaAgenda')" style="cursor:pointer">
                                 <div class="widget-bg-color-icon card-box">
                                     <div class="bg-icon bg-icon-warning pull-left">
                                         <i class="md md-warning text-warning"></i>
@@ -89,7 +79,7 @@ function redirecionar(link){
                                         <c:if test="${pendentes > 0 }">
                                         	<p class="text-muted">${pendentes }</p>
                                         </c:if>
-                                        <c:if test="${pendentes == null }">
+                                        <c:if test="${pendentes == null || pendentes == 0}">
                                         	<p class="text-muted">Nenhuma</p>
                                         </c:if>
                                     </div>
@@ -99,7 +89,7 @@ function redirecionar(link){
                             
                             
 							<c:if test="${usuarioSessao.perfil.funcionario }">
-                            <div class="col-md-6 col-lg-3">
+                            <div class="col-md-6 col-lg-3" onclick="redirecionar('/minhaAgenda')" style="cursor:pointer">
                                 <div class="widget-bg-color-icon card-box">
                                     <div class="bg-icon bg-icon-success pull-left">
                                         <i class="md md-people text-success"></i>
@@ -130,8 +120,8 @@ function redirecionar(link){
 	                                        		<h3><b>Meus Pets</b></h3>
 	                                        	</div>
 	                                        	<c:forEach items="${usuarioSessao.pet }" var="o">
-		                                            <div class="col-sm-4">
-													  <img src="${o.pathImagem }" class="card-img-top" style="max-width:100px; border-radius:10px">
+		                                            <div class="col-sm-4" onclick="redirecionar('/pet_${o.id }')" >
+													  <img src="${o.pathImagem }" class="card-img-top" style="max-width:100px; border-radius:10px; cursor:pointer">
 													  <div class="card-body">
 													    <h4 class="card-title">${o.nome }</h4>
 													    <p class="card-text">
@@ -150,7 +140,7 @@ function redirecionar(link){
 														    <c:forEach items="${o.vacina }" var="v" varStatus="loop">
 														    	${v.nome }
 														    	<c:if test="${o.vacina.size() > 1}">
-															    	<c:if test="${loop.index < o.vacina.size()}">
+															    	<c:if test="${(loop.index+1) < o.vacina.size()}">
 															    	,
 															    	</c:if>
 														    	</c:if>
@@ -160,7 +150,7 @@ function redirecionar(link){
 														    <c:forEach items="${o.responsaveis }" var="r" varStatus="loopRes">
 														    	${r.nome }
 														    	<c:if test="${o.responsaveis.size() > 1}">
-															    	<c:if test="${loopRes.index < o.responsaveis.size()}">
+															    	<c:if test="${(loopRes.index+1) < o.responsaveis.size()}">
 															    	,
 															    	</c:if>
 														    	</c:if>
@@ -203,7 +193,8 @@ function redirecionar(link){
 		                                                    <c:if test="${c.confirmado }">
 		                                                    	<p>
 		                                                    		<strong><a class="text-info">Confirmado</a></strong>
-		                                                    		<br>${c.cliente } <c:if test="${c.clienteSistema != null }">(${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Cliente: ${c.cliente } <c:if test="${c.clienteSistema != null }">(Aberto por: ${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Pet: ${c.pet.nome } (${c.pet.raca })
 		                                                    		<br>${c.servico.nome }
 																	<br><strong>${c.observacoes }</strong>
 		                                                    	</p>
@@ -212,7 +203,8 @@ function redirecionar(link){
 		                                                    <c:if test="${!c.confirmado && !c.cancelado }">
 		                                                    	<p>
 		                                                    		<strong><a class="text-warning">Pendente</a></strong>
-		                                                    		<br>${c.cliente } <c:if test="${c.clienteSistema != null }">(${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Cliente: ${c.cliente } <c:if test="${c.clienteSistema != null }">(Aberto por: ${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Pet: ${c.pet.nome } (${c.pet.raca })
 		                                                    		<br>${c.servico.nome }
 																	<br><strong>${c.observacoes }</strong>
 		                                                    	</p>
@@ -221,7 +213,8 @@ function redirecionar(link){
 		                                                    <c:if test="${c.cancelado }">
 		                                                    	<p>
 		                                                    		<strong><a class="text-danger">Recusado</a></strong>
-		                                                    		<br>${c.cliente } <c:if test="${c.clienteSistema != null }">(${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Cliente: ${c.cliente } <c:if test="${c.clienteSistema != null }">(Aberto por: ${c.clienteSistema.nome })</c:if>
+		                                                    		<br>Pet: ${c.pet.nome } (${c.pet.raca })
 		                                                    		<br>${c.servico.nome }
 																	<br><strong>${c.observacoes }</strong>
 		                                                    	</p>

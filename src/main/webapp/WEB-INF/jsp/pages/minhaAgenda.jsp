@@ -100,7 +100,7 @@ function editar(id, tipo){
 
 
 <!-- start: page -->
-<c:if test="${usuario.perfil.admin || usuario.perfil.funcionario }">
+<c:if test="${usuarioSessao.perfil.admin || usuarioSessao.perfil.funcionario }">
 <form action="/minhaAgenda" method="post" id="formConfirmar" accept-charset="utf-8">
 <div class="row">
 	<div class="col-md-12">
@@ -194,13 +194,13 @@ function editar(id, tipo){
 								<table class="table table-bordered table-striped mb-none" id="datatable-default" style="overflow:auto">
 									<thead>
 										<tr>
-											<c:if test="${usuario.perfil.cliente && !usuario.perfil.admin }">
+											<c:if test="${usuarioSessao.perfil.cliente && !usuarioSessao.perfil.admin }">
 												<th>Profissional</th>
 											</c:if>
-											<c:if test="${!usuario.perfil.cliente }">
+											<c:if test="${!usuarioSessao.perfil.cliente }">
 												<th>Ordem</th>
 											</c:if>
-											<c:if test="${usuario.perfil.admin || usuario.perfil.funcionario }">
+											<c:if test="${usuarioSessao.perfil.admin || usuarioSessao.perfil.funcionario }">
 												<th>Confirma</th>
 												<th>Cliente</th>
 												<th>Recusa</th>
@@ -210,6 +210,8 @@ function editar(id, tipo){
 											<th>Fim</th>
 											<th>Confirmado</th>
 											<th>Cliente</th>
+											<th>Pet</th>
+											<th>Raça</th>
 											<th>Cadastro</th>
 											<th>Profissional</th>
 											<th>Servico</th>
@@ -221,13 +223,13 @@ function editar(id, tipo){
 										<c:set var = "ordem" value = "1"/>
 										<c:forEach items="${consultas }" var="p">
 											<tr class="gradeX">
-												<c:if test="${usuario.perfil.cliente && !usuario.perfil.admin }">
+												<c:if test="${usuarioSessao.perfil.cliente && !usuarioSessao.perfil.admin }">
 													<td> <a style="color:#BCF5A9" class="fa fa-whatsapp" href="https://wa.me/55${p.profissional.celularSomenteNumero }"></a>
 												</c:if>
-												<c:if test="${!usuario.perfil.cliente }">
+												<c:if test="${!usuarioSessao.perfil.cliente }">
 													<td>${ordem }º</td>
 												</c:if>
-												<c:if test="${usuario.perfil.admin || usuario.perfil.funcionario }">
+												<c:if test="${usuarioSessao.perfil.admin || usuarioSessao.perfil.funcionario }">
 													<td> <i style="color:#9AFE2E" class="fa fa-check-circle" onclick="editar(${p.id }, 'confirmar') "></i>
 													<td> <a style="color:#BCF5A9" class="fa fa-whatsapp" href="https://wa.me/55${p.clienteSistema.celularSomenteNumero }"></a>
 													<td> <i style="color:#F78181" class="fa fa-trash" onclick="editar(${p.id }, 'recusar') "></i> &nbsp </i>
@@ -241,6 +243,8 @@ function editar(id, tipo){
 												<c:if test="${!p.confirmado && p.cancelado}"><span style="color:#F5A9A9">Recusado</span></c:if>
 												</td>
 												<td>${p.cliente }</td>
+												<td><a href="/pet_${p.pet.id }">${p.pet.nome }</a></td>
+												<td>${p.pet.raca }</td>
 												<td>${p.clienteSistema.nome }</td>
 												<td>
 												<c:if test="${p.profissional != null }">

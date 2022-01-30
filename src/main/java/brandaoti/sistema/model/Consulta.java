@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -41,7 +42,8 @@ public class Consulta {
 	@Column
 	private Boolean cancelado  = false;
 	
-	
+	@ManyToOne
+	private Pet pet ;
 	
 	public Boolean getAtivo() {
 		return ativo;
@@ -178,6 +180,12 @@ public class Consulta {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Pet getPet() {
+		return pet;
+	}
+	public void setPet(Pet pet) {
+		this.pet = pet;
 	}
 
 	

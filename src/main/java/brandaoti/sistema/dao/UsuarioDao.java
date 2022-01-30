@@ -40,7 +40,8 @@ public interface UsuarioDao extends JpaRepository<Usuario, Integer> {
 	@Query(" select p from Usuario p where extract(month from dataDeCadastro) = extract(month from sysdate) and ativo = TRUE and YEAR(dataDeCadastro)=(YEAR(NOW())) ")
 	List<Usuario> novosDoMes();
 	
-	
+	@Query(" select u from Usuario u where u.cpf like (:cpf)")
+	Usuario buscarCpf(@Param("cpf") String cpf);
 	
 	
 }

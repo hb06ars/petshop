@@ -136,7 +136,7 @@ function editar(id){
 
 <!-- start: page -->
 <div class="row">
-<form action="/meu_registro" method="post" accept-charset="utf-8">
+<form action="/atualizar_pet" method="post" accept-charset="utf-8">
 	<div class="col-md-12">
 		<div data-collapsed="0" class="panel">
 			<div class="panel-heading">
@@ -145,129 +145,109 @@ function editar(id){
 						<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
 						<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
 					</div>
-					<h2 class="panel-title" id="">Meu Registro </h2>
+					<span class="panel-title" >
+						<img src="${petSelecionado.pathImagem }" style="max-width:100px" />
+						<span style="position:relative; left:10px; top:10px" class="h1">${petSelecionado.nome }</span>
+					</span>
 				</div>
 			</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-3 form-group">
-						<input type="text" placeholder="Login" name="matricula" id="matricula" class="form-control" value="${usuarioSessao.matricula }" readonly>
-					</div>
-					<div class="col-md-4 form-group">
-						<input type="text" placeholder="Nome" name="nome" id="nome" class="form-control" value="${usuarioSessao.nome }" required>
-					</div>
-					<div class="col-md-2 form-group">
-						<input type="text" id="cpf" name="cpf" maxlength="14" placeholder="CPF" minlength="14" value="${usuarioSessao.cpf }" onkeydown="javascript: fMasc( this, mCPF );" class="form-control" required>
+						<label>ID:</label>
+						<input type="text" placeholder="Login" name="id" id="id" class="form-control" value="${petSelecionado.id }" readonly>
 					</div>
 					<div class="col-md-3 form-group">
-						<div class="input-group">
-							<span class="input-group-addon">
-								<i class="fa fa-birthday-cake"></i>
-							</span>
-							<input type="date" name="dataNascimento" id="dataNascimento" class="form-control" value="${usuarioSessao.dataNascimento }" />
-						</div>
-					</div>
-					<div class="col-md-4 form-group">
-						<div class="input-group">
-							<span class="input-group-addon">
-								<i class="fa fa-phone"></i>
-							</span>
-							<input type="text" id="telefone" name="telefone" placeholder="Telefone" maxlength="14" minlength="13" onkeydown="javascript: fMasc( this, mTel );" value="${usuarioSessao.telefone }" class="form-control" >
-						</div>
-					</div>
-					<div class="col-md-4 form-group">
-						<div class="input-group">
-							<span class="input-group-addon">
-								<i class="fa fa-phone"></i>
-							</span>
-							<input type="text" id="celular" name="celular" placeholder="Celular" maxlength="14" minlength="14" onkeydown="javascript: fMasc( this, mTel );" value="${usuarioSessao.celular }" class="form-control" >
-						</div>
-					</div>
-					<div class="col-md-4 form-group">
-						<div class="input-group">
-							<span class="input-group-addon">
-								<i class="fa fa-envelope"></i>
-							</span>
-							<input type="email" name="email" id="email" class="form-control" value="${usuarioSessao.email }" placeholder="eg.: email@email.com" />
-						</div>
-					</div>
-					<div class="col-md-4 form-group">
-						<input type="text" placeholder="Endereço" id="endereco" name="endereco" value="${usuarioSessao.endereco }" class="form-control">
+						<label>Nome:</label>
+						<input type="text" placeholder="Nome" name="nome" id="nome" class="form-control" value="${petSelecionado.nome }" required>
 					</div>
 					<div class="col-md-3 form-group">
-						<input type="text" placeholder="Bairro" id="bairro" name="bairro" value="${usuarioSessao.bairro }" class="form-control">
+						<label>Espécie:</label>
+						<input type="text" placeholder="Espécie" name="especie" id="especie" class="form-control" value="${petSelecionado.especie }" required>
 					</div>
 					<div class="col-md-3 form-group">
-						<input type="text" placeholder="Cidade" id="cidade" name="cidade" value="${usuarioSessao.cidade }" class="form-control">
+						<label>Gênero:</label>
+						<select id="genero" name="genero" class="form-control">
+							<option value="Masculino" <c:if test="${petSelecionado.genero == 'Masculino' }" >selected</c:if> >Masculino</option>
+							<option value="Feminino" <c:if test="${petSelecionado.genero == 'Feminino'  }" >selected</c:if> >Feminino</option>
+						</select>
+						
 					</div>
-					<div class="col-md-2 form-group">
-						<input type="text" placeholder="Estado" id="estado" maxlength="2" minlength="2" value="${usuarioSessao.estado }" name="estado" class="form-control">
+					<div class="col-md-3 form-group">
+						<label>Raça:</label>
+						<input type="text" placeholder="Raça" name="raca" id="raca" class="form-control" value="${petSelecionado.raca }" required>
 					</div>
-					<div class="col-md-2 form-group">
-						<input type="text" id="cep" name="cep" placeholder="99999-999" maxlength="9" minlength="9" value="${usuarioSessao.cep }" onkeydown="javascript: fMasc( this, mCEP );" class="form-control" >
+					<div class="col-md-3 form-group">
+						<label>Peso (kg):</label>
+						<input type="number" step="0.01" placeholder="Peso" name="peso" id="peso" class="form-control" value="${petSelecionado.peso }" required>
 					</div>
-					<div class="col-md-7 form-group">
-						<input type="text" placeholder="Link da Foto" id="pathImagem" name="pathImagem" value="${usuarioSessao.pathImagem }" class="form-control">
+					<div class="col-md-3 form-group">
+						<label>Castrado:</label>
+						<select id="castracao" name="castracao" class="form-control">
+							<option value="1" <c:if test="${petSelecionado.castracao}" >selected</c:if> >Sim</option>
+							<option value="0" <c:if test="${!petSelecionado.castracao}" >selected</c:if> >Não</option>
+						</select>
+						
+					</div>
+					<div class="col-md-3 form-group">
+						<label>Nascimento:</label>
+						<input type="date" placeholder="Data de Nascimento" name="pet_dataNascimento" id="pet_dataNascimento" class="form-control" value="${fn:replace(petSelecionado.nascimento,'T00:00','') }" required>
+					</div>
+					<div class="col-md-3 form-group">
+						<label>Path Imagem:</label>
+						<input type="text" placeholder="Imagem URL" name="pathImagem" id="pathImagem" class="form-control" value="${petSelecionado.pathImagem }" required>
+					</div>
+					<div class="col-md-9 form-group">
+						<label>Observações:</label>
+						<input type="text" placeholder="Observações" name="observacoes" id="observacoes" class="form-control" value="${petSelecionado.observacoes }" required>
 					</div>
 					
-					<c:if test="${usuarioSessao.perfil.funcionario }" >
+					
+					<div class="col-md-3 form-group">
+						<label>Vacina:</label><br>
+						<c:forEach items="${vacinas }" var="v">
+							<c:set var = "encontrouVacina" value = "0"/>
+							<c:forEach items="${petSelecionado.vacina }" var="vac">
+								<c:if test="${v.id == vac.id }">
+									<c:set var = "encontrouVacina" value = "1"/>
+									<input type="checkbox" checked name="pet_vacina" id="pet_vacina" value="${vac.id }">
+								</c:if>
+							</c:forEach>
+							<c:if test="${encontrouVacina == 0 }">
+								<input type="checkbox" name="pet_vacina" id="pet_vacina" value="${v.id }">
+							</c:if>
+							<label for="vacina"> ${v.nome }</label><br>
+						</c:forEach>
+					</div>
+					
+					<div class="col-md-3 form-group">
+						<label>Responsáveis:</label><br>
+						<c:forEach items="${petSelecionado.responsaveis }" var="res">
+							<input type="checkbox" checked name="pet_responsaveis" id="pet_responsaveis" value="${res.id }">
+							<label for="responsaveis"> ${res.nome }</label><br>
+						</c:forEach>
+					</div>
+					
+					
+					<c:if test="${usuarioSessao.perfil.cliente }">
 						<div class="col-md-3 form-group">
-							<select id="perfil" name="perfil_codigo" class="form-control">
-								<option value="0" >-- Perfil --</option>
-								<option value="1" <c:if test="${usuarioSessao.perfil.admin }" >selected</c:if> >Admnistrador</option>
-								<option value="2" <c:if test="${usuarioSessao.perfil.cliente }" >selected</c:if> >Cliente</option>
-								<option value="3" <c:if test="${usuarioSessao.perfil.funcionario }" >selected</c:if> >Funcionário</option>
-							</select>
+							<label>Adicionar outro Responsável:</label><br>
+							<input type="text" placeholder="CPF" name="cpf" id="cpf" class="form-control" >
 						</div>
-					</c:if>
-					<c:if test="${usuarioSessao.perfil.cliente }" >
-						<div class="col-md-3 form-group">
-							<select id="perfil" name="perfil_codigo" class="form-control">
-								<option value="0" >-- Perfil --</option>
-								<option value="2" <c:if test="${usuarioSessao.perfil.cliente }" >selected</c:if> >Cliente</option>
-							</select>
+					
+						<div class="col-md-12 form-group" id="atualizar" >
+							<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">
 						</div>
+						<input type="hidden" id="acao" name="acao" value="atualizar">
 					</c:if>
-					
-					
-					<div class="col-md-2 form-group" id="atualizar" >
-						<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">
-					</div>
-					<input type="hidden" id="acao" name="acao" value="atualizar">
 				</div>
 			</div>
 		</div>
 	</div>
+	<input type="hidden" name="idPet" id="idPet" value="${petSelecionado.id }">
 </form>
 
 
-	<div class="col-md-12">
-		<div data-collapsed="0" class="panel">
-			<div class="panel-heading">
-				<div class="panel-title">
-					<div class="panel-actions">
-						<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-						<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-					</div>
-					<h2 class="panel-title" id="">Meus Pets </h2>
-				</div>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<c:forEach items="${usuarioSessao.pet }" var="p">
-						<div class="col-md-4 form-group">
-							<div class="col-md-3 form-group">
-								<img onclick="redirecionar('/pet_${p.id }')" src="${p.pathImagem }" style="max-width:50px; cursor:pointer"/>
-							</div>
-							<div class="col-md-9 form-group" style="cursor:pointer" onclick="redirecionar('/pet_${p.id }')">
-								<h3>${p.nome }</h3>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 </div>

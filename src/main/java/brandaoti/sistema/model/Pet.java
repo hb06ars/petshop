@@ -44,7 +44,7 @@ public class Pet {
 	(fetch = FetchType.LAZY)
 	private List<Vacina> vacina;
 	
-	@OneToMany
+	@ManyToMany
 	(fetch = FetchType.LAZY)
 	private List<Usuario> responsaveis;
 	

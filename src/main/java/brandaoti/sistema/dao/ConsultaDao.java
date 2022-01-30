@@ -30,4 +30,7 @@ public interface ConsultaDao extends JpaRepository<Consulta, Integer> {
 	
 	@Query(" select p from Consulta p where p.ativo = TRUE and ((p.profissional.id like (:meuID) or p.profissional.id is null) or p.clienteSistema.id like (:meuID)) order by p.data desc")
 	List<Consulta> buscarMinhaAgendaOrdenadaData(@Param("meuID") Integer meuID);
+	
+	@Query(" select p from Consulta p where p.ativo = TRUE and (p.clienteSistema.id like (:meuID)) order by p.id asc")
+	List<Consulta> buscarAgendaCliente(@Param("meuID") Integer meuID);
 }

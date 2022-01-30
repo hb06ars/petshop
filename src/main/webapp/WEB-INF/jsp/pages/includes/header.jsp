@@ -65,7 +65,7 @@
                 <!-- LOGO -->
                 <div class="topbar-left">
                     <div class="text-center">
-                        <a href="/home" class="logo"><i class="fa fa-calendar icon-c-logo"></i><span>Atendimento</span></a>
+                        <a href="/" class="logo"><i class="fa fa-calendar icon-c-logo"></i><span>Atendimento</span></a>
                         <!-- Image Logo here -->
                         <!--<a href="index.html" class="logo">-->
                             <!--<i class="icon-c-logo"> <img src="/assets/images/logo_sm.png" height="42"/> </i>-->

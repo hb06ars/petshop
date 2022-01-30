@@ -408,11 +408,11 @@ function redirecionar(link){
 			        
 			        <div class="row">
 						<div class="col-lg-6">
-							<c:if test="${usuario.perfil.funcionario }">
+							<c:if test="${usuarioSessao.perfil.funcionario }">
 								<input name="nomeCliente" id="nomeCliente" placeholder="Insira o nome do Cliente! *" value="" required autofocus>
 							</c:if>
-							<c:if test="${!usuario.perfil.funcionario }">
-								<input name="nomeCliente" id="nomeCliente" placeholder="Insira seu nome." value="${usuario.nome }" required autofocus>
+							<c:if test="${!usuarioSessao.perfil.funcionario }">
+								<input name="nomeCliente" id="nomeCliente" placeholder="Insira seu nome." value="${usuarioSessao.nome }" required autofocus>
 							</c:if>
 			          <div class="info_b">
 			            <div class="date_b">
@@ -429,6 +429,17 @@ function redirecionar(link){
 			            </div>
 			            <div class="address">
 				             <p>
+				                Pet: 
+				                <select class="form-control select2" id="petSelecionado" name="petSelecionado">
+					                <option>Selecione o Pet</option>
+				                    	<c:forEach items="${usuarioSessao.pet }" var="pet">
+				                    		<option value="${pet.id }">${pet.nome }</option>
+				                    	</c:forEach>
+				                </select>
+				             </p>
+			            </div>
+			            <div class="address">
+				             <p>
 				                Servi&ccedil;o: 
 				                <select class="form-control select2" id="servicoSelecionado" name="servicoSelecionado" onchange="atualizaPreco()">
 					                <option>Selecione o Servi&ccedil;o</option>
@@ -442,9 +453,9 @@ function redirecionar(link){
 			              <p>
 			                Profissional: 
 			                <select class="form-control select2" name="profissionalSelecionado" id="profissionalSelecionado" style="background-color:#2B4450" onchange="atualizaDisponibilidade()">
-				                		<option value="" <c:if test="${!usuario.perfil.funcionario }">selected</c:if> >Qualquer um.</option>
+				                		<option value="" <c:if test="${!usuarioSessao.perfil.funcionario }">selected</c:if> >Qualquer um.</option>
 			                    	<c:forEach items="${funcionarios }" var="f">
-			                    		<option value="${f.id }" <c:if test="${f.id == usuario.id }">selected</c:if> >${f.nome }</option>
+			                    		<option value="${f.id }" <c:if test="${f.id == usuarioSessao.id }">selected</c:if> >${f.nome }</option>
 			                    	</c:forEach>
 			                </select>
 			              </p>
