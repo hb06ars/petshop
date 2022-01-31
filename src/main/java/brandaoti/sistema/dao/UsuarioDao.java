@@ -10,8 +10,8 @@ import brandaoti.sistema.model.Preco;
 import brandaoti.sistema.model.Usuario;
 
 public interface UsuarioDao extends JpaRepository<Usuario, Integer> {
-	@Query(" select u from Usuario u where upper( u.matricula ) like upper( :matricula ) and upper( u.senha ) like upper( :senha ) ")
-	Usuario fazerLogin(@Param("matricula") String login, @Param("senha") String senha);
+	@Query(" select u from Usuario u where upper( u.email ) like upper( :email ) and upper( u.senha ) like upper( :senha ) ")
+	Usuario fazerLogin(@Param("email") String email, @Param("senha") String senha);
 	
 	@Query(" select u from Usuario u where 1=1 and nome = '(:aluno.nome)' ")
 	List<Usuario> filtro(@Param("aluno") Usuario aluno);

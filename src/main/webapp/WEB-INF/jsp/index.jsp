@@ -75,6 +75,8 @@ function iniciando(){
 		modalMensagem('${mensagem}');
 	}
 }
+
+
 </script>
 
 	
@@ -91,14 +93,14 @@ function iniciando(){
 					
 					
 					<div class="wrap-input100 validate-input" data-validate = "Email inválido, exemplo: seuemail@provedor">
-						<input autocomplete="off" class="input100" type="text" name="usuarioVal">
+						<input autocomplete="off" class="input100" type="email" name="usuarioVal" required>
 						<span class="focus-input100"></span>
 						<span class="label-input100">Email</span>
 					</div>
 					
 					
 					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<input autocomplete="off" class="input100" type="password" name="senhaVal">
+						<input autocomplete="off" class="input100" type="password" name="senhaVal" required>
 						<span class="focus-input100"></span>
 						<span class="label-input100">Password</span>
 					</div>
@@ -112,9 +114,9 @@ function iniciando(){
 					</div>
 			
 
-					<div class="container-login100-form-btn">
+					<div id="botaoEntrar" class="container-login100-form-btn">
 						<button class="login100-form-btn">
-							Entrar
+							<span>Entrar</span>
 						</button>
 					</div>
 				</form>

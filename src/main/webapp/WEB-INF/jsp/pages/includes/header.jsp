@@ -93,25 +93,16 @@
             <div class="topbar">
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <div class="text-center">
-                        <a href="/" class="logo"><i class="fa fa-calendar icon-c-logo"></i><span>Atendimento</span></a>
-                        <!-- Image Logo here -->
-                        <!--<a href="index.html" class="logo">-->
-                            <!--<i class="icon-c-logo"> <img src="/assets/images/logo_sm.png" height="42"/> </i>-->
-                            <!--<span><img src="/assets/images/logo_light.png" height="20"/></span>-->
-                        <!--</a>-->
+                    <div class="text-left">
+                         <button style="min-width:100%; padding-left:28px" class="text-left button-menu-mobile open-left waves-effect waves-light">
+                         	<i class="fa fa-paw"></i>
+                         </button>
                     </div>
                 </div>
                 <!-- Button mobile view to collapse sidebar menu -->
-                <div class="navbar navbar-default" role="navigation">
+                <div class="navbar navbar-default" role="navigation" style="background-color:#1F395B">
                     <div class="container">
                         <div class="">
-                            <div class="pull-left">
-                                <button class="button-menu-mobile open-left waves-effect waves-light">
-                                    <i class="md md-menu"></i>
-                                </button>
-                                <span class="clearfix"></span>
-                            </div>
                             <ul class="nav navbar-nav navbar-right pull-right">
                                 <li class="hidden-xs">
                                     <a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i class="icon-size-fullscreen"></i></a>
@@ -125,10 +116,10 @@
             <!-- Top Bar End -->
 
             <!-- ========== Left Sidebar Start ========== -->
-            <div class="left side-menu">
+            <div class="left side-menu" style="background-color:#345270">
                 <div class="sidebar-inner slimscrollleft">
                     <!--- Divider -->
-                    <div id="sidebar-menu">
+                    <div id="sidebar-menu" style="padding-top:10px">
                         <ul>
 							<li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="ti-book">
@@ -162,7 +153,7 @@
                             
                             <c:if test="${usuarioSessao.perfil.funcionario }">
 	                            <li class="has_sub">
-	                                <a href="javascript:void(0);" class="waves-effect"><i class="ti-user">
+	                                <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-user">
 	                                	</i><span>Cadastro </span> <span class="menu-arrow"></span>
 	                                </a>
 	                                <ul>
@@ -177,6 +168,9 @@
 	                                    </li>
 	                                    <li>
 	                                        <a href="/precos"><span>Preços</span></a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="/vacinas"><span>Vacinas</span></a>
 	                                    </li>
 	                                </ul>
 	                            </li>
@@ -208,7 +202,7 @@
             <!-- ============================================================== -->
             <!-- START PAGE right Content here -->
             <!-- ============================================================== -->                      
-            <div class="content-page">
+            <div class="content-page" >
                 <!-- Start content -->
                 <div class="content">
                     <div class="container">

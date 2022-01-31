@@ -206,7 +206,7 @@ public class SistemaController extends HttpServlet {
 				h.setAtivo(true);
 				h.setMatricula("adm");
 				h.setCpf("22233344455");
-				h.setEmail("teste@teste.com");
+				h.setEmail("adm@adm.com");
 				h.setSenha("adm");
 				h.setNome("Henrique");
 				h.setTelefone("(11)98931-6271");
@@ -224,7 +224,7 @@ public class SistemaController extends HttpServlet {
 				h2.setAtivo(true);
 				h2.setMatricula("admb");
 				h2.setCpf("434344433433");
-				h2.setEmail("teste@testeb.com");
+				h2.setEmail("adm@admb.com");
 				h2.setSenha("admb");
 				h2.setNome("HenriqueB");
 				h2.setTelefone("(11)98931-6271");
@@ -432,6 +432,12 @@ public class SistemaController extends HttpServlet {
 						List<Preco> pl = precoDao.buscarTudo();
 						request.setAttribute("precos", pl);
 					}
+					if(tabela.equals("vacinas")) {
+						link = "pages/vacinas";
+						vacinaDao.delete(vacinaDao.findById(id).get());
+						List<Vacina> pl = vacinaDao.findAll();
+						request.setAttribute("vacinas", pl);
+					}
 					if(tabela.equals("consultas")) {
 						link = "pages/minhaAgenda";
 						consultaDao.delete(consultaDao.findById(id).get());
@@ -615,6 +621,33 @@ public class SistemaController extends HttpServlet {
 				}
 				List<Preco> gruposTodos = precoDao.buscarTudo();
 				request.setAttribute("grupos", gruposTodos);
+			}
+			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
+		}
+		
+		
+		@RequestMapping(value = "/vacinas", produces = "text/plain;charset=UTF-8", method = {RequestMethod.GET,RequestMethod.POST}) // Pagina de Vendas
+		public void vacinas(HttpServletRequest request, HttpServletResponse response, String acao, Vacina vacinas, String vacinaNome, Integer idValor) throws SQLException, ServletException, IOException {
+			String link = "pages/deslogar";
+			HttpSession session = request.getSession();
+			if(session.getAttribute("usuarioSessao") != null) {
+				Usuario usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
+				usuarioSessao = usuarioDao.findById(usuarioSessao.getId()).get();
+				request.setAttribute("usuarioSessao", usuarioSessao);
+				link = "pages/vacinas";
+				if(acao != null) {
+					Vacina v = new Vacina();
+					if(acao.equals("atualizar")) {
+						v = vacinaDao.findById(idValor).get();
+					}
+					v.setNome(vacinaNome);
+					vacinaDao.save(v);
+					String msg = "Vacina cadastrada com sucesso!";
+					request.setAttribute("mensagem", msg);
+					request.setAttribute("tipoMensagem", "info");
+				}
+				List<Vacina> gruposTodos = vacinaDao.findAll();
+				request.setAttribute("vacinas", gruposTodos);
 			}
 			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
 		}
