@@ -56,7 +56,7 @@ function editar(id){
 
 
 <!-- start: page -->
-<c:if test="${usuario.perfil.admin }">
+<c:if test="${usuarioSessao.perfil.admin }">
 <div class="row">
 <form action="/precos" method="post" accept-charset="utf-8">
 	<div class="col-md-12">
@@ -124,7 +124,7 @@ function editar(id){
 								<table class="table table-bordered table-striped mb-none" id="datatable-default" style="overflow:auto">
 									<thead>
 										<tr>
-											<c:if test="${usuario.perfil.admin }">
+											<c:if test="${usuarioSessao.perfil.admin }">
 												<th>Editar</th>
 											</c:if>
 											<c:if test="${!usuario.perfil.cliente }">
@@ -137,7 +137,7 @@ function editar(id){
 									<tbody>
 										<c:forEach items="${grupos }" var="p">
 											<tr class="gradeX">
-												<c:if test="${usuario.perfil.admin }">
+												<c:if test="${usuarioSessao.perfil.admin }">
 													<td>
 														<i class="fa fa-trash" onclick="modalDeletar('precos', ${p.id}) "></i> &nbsp
 														<i class="fa fa-pencil" onclick="editar(${p.id }) "></i>

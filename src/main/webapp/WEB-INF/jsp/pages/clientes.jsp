@@ -151,7 +151,7 @@ function editar(id){
 
 
 <!-- start: page -->
-<c:if test="${usuario.perfil.admin == true}">
+<c:if test="${usuarioSessao.perfil.admin == true}">
 <div class="row">
 <form action="/clientes" method="post" accept-charset="utf-8">
 	<div class="col-md-12">
@@ -272,7 +272,7 @@ function editar(id){
 								<table class="table table-bordered table-striped mb-none" id="datatable-default" style="overflow:auto">
 									<thead>
 										<tr>
-											<c:if test="${usuario.perfil.admin == true}">
+											<c:if test="${usuarioSessao.perfil.admin == true}">
 												<th>Editar</th>
 												<th>Matrícula</th>
 											</c:if>
@@ -280,7 +280,7 @@ function editar(id){
 											<th>Telefone</th>
 											<th>Celular</th>
 											<th>Email</th>
-											<c:if test="${usuario.perfil.admin == true}">
+											<c:if test="${usuarioSessao.perfil.admin == true}">
 												<th>Endereço</th>
 												<th>Bairro</th>
 												<th>Cidade</th>
@@ -294,7 +294,7 @@ function editar(id){
 									<tbody>
 										<c:forEach items="${usuarios }" var="u">
 											<tr class="gradeX">
-												<c:if test="${usuario.perfil.admin == true}">
+												<c:if test="${usuarioSessao.perfil.admin == true}">
 													<td>
 														<i class="fa fa-trash" onclick="modalDeletar('usuario', ${u.id}) "></i> &nbsp
 														<i class="fa fa-pencil" onclick="editar(${u.id }) "></i>
@@ -305,7 +305,7 @@ function editar(id){
 												<td>${u.telefone }</td>
 												<td>${u.celular }</td>
 												<td>${u.email }</td>
-												<c:if test="${usuario.perfil.admin == true}">
+												<c:if test="${usuarioSessao.perfil.admin == true}">
 													<td>${u.endereco }</td>
 													<td>${u.bairro }</td>
 													<td>${u.cidade }</td>

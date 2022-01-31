@@ -55,7 +55,7 @@ function acao(){
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-3 form-group">
-						<input type="text" placeholder="Matrícula" name="matricula" id="matricula" class="form-control" value="${usuario.matricula }" readonly>
+						<input type="text" placeholder="Matrícula" name="matricula" id="matricula" class="form-control" value="${usuarioSessao.matricula }" readonly>
 					</div>
 					<div class="col-md-3 form-group">
 						<input type="password" placeholder="Senha Atual" name="senha" id="senha" class="form-control" required>
