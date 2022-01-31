@@ -121,6 +121,11 @@
                     <!--- Divider -->
                     <div id="sidebar-menu" style="padding-top:10px">
                         <ul>
+                        	<li class="has_sub">
+                            	<a href="/home" class="waves-effect"><i class="ti-home"></i>
+                            		<span>Início</span>
+                            	</a>
+                            </li>
 							<li class="has_sub">
                                 <a href="javascript:void(0);" class="waves-effect"><i class="ti-book">
                                 	</i><span>Agenda </span> <span class="menu-arrow"></span>
