@@ -27,9 +27,46 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/login/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/login/css/main.css">
+	<script src="assets/outros/jqueryLoader.min.js"></script>
+	
+	<script>
+		//Loading ---------------------------------------
+		jQuery(function($){
+			$(".loader").fadeOut("slow"); //retire o delay quando for copiar!
+		});
+		// Loading ---------------------------------------
+	</script>
 <!--===============================================================================================-->
 </head>
+
+<style>
+	.loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background-color: white;
+	}
+</style>
+	
 <body onload="iniciando()" style="background-color: #666666;">
+
+<div id="loader" class="loader">
+	<div class="col-sm-12 text-center" style="top:30%; color: #302010">
+		<div class="col-sm-12 text-center">
+			<img src="/assets/images/avatar-1.webp" onerror="this.src='/assets/images/avatar-1.jpg" style="max-width:100px" />
+			<br>
+			Aguarde...
+			<br>
+		</div>
+		<div class="col-sm-12 text-center">
+			<span class='fa fa-spinner fa-spin fa-2x'></span>
+		</div>
+	</div>
+</div>
+
 <jsp:include page="pages/includes/modais/modalMensagem.jsp" />
 
 <script>
