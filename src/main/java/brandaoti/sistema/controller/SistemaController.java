@@ -220,6 +220,24 @@ public class SistemaController extends HttpServlet {
 				h.setPerfil(perfilDao.buscarAdm().get(0));
 				usuarioDao.save(h);
 				
+				Usuario h2 = new Usuario();
+				h2.setAtivo(true);
+				h2.setMatricula("admb");
+				h2.setCpf("434344433433");
+				h2.setEmail("teste@testeb.com");
+				h2.setSenha("admb");
+				h2.setNome("HenriqueB");
+				h2.setTelefone("(11)98931-6271");
+				h2.setCelular("(11)98931-6271");
+				h2.setEndereco("Teste...");
+				h2.setCep("00000-000");
+				h2.setBairro("Jd da Alegria");
+				h2.setDataNascimento(LocalDate.now());
+				h2.setBairro("São Paulo");
+				h2.setEstado("SP");
+				h2.setPerfil(perfilDao.buscarAdm().get(0));
+				usuarioDao.save(h2);
+				
 				Usuario d = new Usuario();
 				d.setAtivo(true);
 				d.setMatricula("123");
@@ -281,12 +299,10 @@ public class SistemaController extends HttpServlet {
 				
 				usuarioDao.save(d);	
 				
-				List<Usuario> listaResponsaveis = new ArrayList<Usuario>();
-				listaResponsaveis.add(usuarioDao.findById(d.getId()).get());
 				
-				pet.setResponsaveis(listaResponsaveis);
+				pet.setResponsavel(usuarioDao.findById(d.getId()).get());
 				petDao.save(pet);
-				pet2.setResponsaveis(listaResponsaveis);
+				pet2.setResponsavel(usuarioDao.findById(d.getId()).get());
 				petDao.save(pet2);
 				
 				// Rafael
@@ -360,49 +376,19 @@ public class SistemaController extends HttpServlet {
 			HttpSession session = request.getSession();
 			String link = "pages/deslogar";
 			List<Consulta> consultas = new ArrayList<Consulta>();
-			Integer confirmada = 0;
-			Integer recusada = 0;
 			Integer clientes = usuarioDao.buscarClientes().size();
-			Integer pendentes = 0;
 			
 			if(session.getAttribute("usuarioSessao") != null) {
 				Usuario usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
 				usuarioSessao = usuarioDao.findById(usuarioSessao.getId()).get();
 				request.setAttribute("usuarioSessao", usuarioSessao);
 				
+				if(usuarioSessao.getPerfil().getAdmin()) {
+					consultas = consultaDao.buscarTudo();
+				} else {
+					consultas = consultaDao.buscarAgendaCliente(usuarioSessao.getId());
+				}
 				link = "pages/home";
-				consultas = consultaDao.buscarMinhaAgendaOrdenadaData(usuarioSessao.getId());
-				if(usuarioSessao!= null && usuarioSessao.getId() != null && usuarioSessao.getPerfil() != null && usuarioSessao.getPerfil().getFuncionario()) {
-					for(Consulta c : consultas) {
-						if(c.getProfissional() == usuarioSessao) {
-							if(c.getConfirmado()) confirmada++;
-							if(c.getCancelado()) recusada++;
-							pendentes = consultaDao.buscaMeusPendentes(usuarioSessao.getId()).size();
-						}
-					}
-				}
-				if(usuarioSessao!= null && usuarioSessao.getId() != null && usuarioSessao.getPerfil() != null && usuarioSessao.getPerfil().getCliente()) {
-					for(Consulta c : consultas) {
-						if(c.getConfirmado()) confirmada++;
-						if(c.getCancelado()) recusada++;
-					}
-				}
-				if(usuarioSessao != null && usuarioSessao.getPerfil() != null && !usuarioSessao.getPerfil().getCliente()) {
-					pendentes = consultaDao.buscarPendentes().size();
-				} else if(usuarioSessao != null && usuarioSessao.getPerfil() != null && usuarioSessao.getPerfil().getCliente()) {
-					List<Consulta> listaAgendaCliente = consultaDao.buscarAgendaCliente(usuarioSessao.getId());
-					pendentes = 0;
-					recusada = 0;
-					confirmada = 0;
-					for(Consulta co : listaAgendaCliente) {
-						if(co.getConfirmado()) confirmada++;
-						if(co.getCancelado()) recusada++;
-						if(!co.getConfirmado() && !co.getCancelado()) pendentes++;
-					}
-				}
-				request.setAttribute("confirmada", confirmada);
-				request.setAttribute("recusada", recusada);
-				request.setAttribute("pendentes", pendentes);
 				request.setAttribute("clientes", clientes);
 				request.setAttribute("consultas", consultas);
 				request.setAttribute("usuarioSessao", usuarioSessao);
@@ -420,37 +406,52 @@ public class SistemaController extends HttpServlet {
 			if(session.getAttribute("usuarioSessao") != null) {
 				usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
 				//Caso esteja logado.
-				if(tabela.equals("usuario")) {
-					link = "pages/clientes";
-					Usuario objeto = usuarioDao.findById(id).get();
-					objeto.setAtivo(false);
-					usuarioDao.save(objeto);
-					List<Usuario> usuarios = usuarioDao.buscarTudo();
-					request.setAttribute("usuarios", usuarios);
-					List<Preco> grupos = precoDao.buscarTudo();
-					request.setAttribute("grupos", grupos);
-				}
-				if(tabela.equals("funcionario")) {
-					link = "pages/funcionarios";
-					Usuario objeto = usuarioDao.findById(id).get();
-					objeto.setAtivo(false);
-					usuarioDao.save(objeto);
-					List<Usuario> usuarios = usuarioDao.buscarFuncionarios();
-					request.setAttribute("usuarios", usuarios);
-					List<Preco> grupos = precoDao.buscarTudo();
-					request.setAttribute("grupos", grupos);
-				}
-				if(tabela.equals("precos")) {
-					link = "pages/precos";
-					precoDao.delete(precoDao.findById(id).get());
-					List<Preco> pl = precoDao.buscarTudo();
-					request.setAttribute("precos", pl);
-				}
-				if(tabela.equals("consultas")) {
-					link = "pages/minhaAgenda";
-					consultaDao.delete(consultaDao.findById(id).get());
-					List<Consulta> pl = consultaDao.buscarTudo();
-					request.setAttribute("consultas", pl);
+				if(usuarioSessao.getPerfil().getFuncionario()) {
+					if(tabela.equals("usuario") && usuarioSessao.getPerfil().getAdmin() ) {
+						link = "pages/clientes";
+						Usuario objeto = usuarioDao.findById(id).get();
+						usuarioDao.delete(objeto);
+						List<Usuario> usuarios = usuarioDao.buscarTudo();
+						request.setAttribute("usuarios", usuarios);
+						List<Preco> grupos = precoDao.buscarTudo();
+						request.setAttribute("grupos", grupos);
+					}
+					if(tabela.equals("funcionario")  && usuarioSessao.getPerfil().getAdmin() ) {
+						link = "pages/funcionarios";
+						Usuario objeto = usuarioDao.findById(id).get();
+						objeto.setAtivo(false);
+						usuarioDao.save(objeto);
+						List<Usuario> usuarios = usuarioDao.buscarFuncionarios();
+						request.setAttribute("usuarios", usuarios);
+						List<Preco> grupos = precoDao.buscarTudo();
+						request.setAttribute("grupos", grupos);
+					}
+					if(tabela.equals("precos")) {
+						link = "pages/precos";
+						precoDao.delete(precoDao.findById(id).get());
+						List<Preco> pl = precoDao.buscarTudo();
+						request.setAttribute("precos", pl);
+					}
+					if(tabela.equals("consultas")) {
+						link = "pages/minhaAgenda";
+						consultaDao.delete(consultaDao.findById(id).get());
+						List<Consulta> pl = consultaDao.buscarTudo();
+						request.setAttribute("consultas", pl);
+					}
+					if(tabela.equals("pet")) {
+						link = "pages/pets";
+						Pet p = petDao.findById(id).get();
+						System.out.println("Pet: "+p.getNome());
+						List<Usuario> usupet = usuarioDao.buscarPet(id);
+						System.out.println("Lista: "+usupet.size());
+						for(Usuario us : usupet) {
+							System.out.println("   - Dono: "+us.getNome());
+							us.getPet().remove(p);
+							usuarioDao.save(us);
+						}
+						petDao.delete(p);
+						request.setAttribute("pets", petDao.findAll());
+					}
 				}
 			}
 			request.setAttribute("usuario", usuarioSessao);
@@ -502,6 +503,7 @@ public class SistemaController extends HttpServlet {
 					a.setBairro(cliente.getBairro());
 					a.setCidade(cliente.getCidade());
 					a.setEstado(cliente.getEstado());
+					a.setOutroResponsavel(cliente.getOutroResponsavel());
 					usuarioDao.save(a);
 					String msg = "Atualização confirmada com sucesso!";
 					request.setAttribute("mensagem", msg);
@@ -704,7 +706,7 @@ public class SistemaController extends HttpServlet {
 					c.setServico(precoDao.findById(Integer.parseInt(servicoSelecionado)).get());
 					c.setObservacoes(obs);
 					
-					if(petSelecionado != null) {
+					if(petSelecionado != null && petSelecionado > 0) {
 						c.setPet(petDao.findById(petSelecionado).get());
 					}
 					//Favor validar se este profissional possui data disponivel neste periodo antes de salvar
@@ -988,14 +990,14 @@ public class SistemaController extends HttpServlet {
 					}
 				}
 				
-				if(usuarioSessao.getPerfil().getCliente()) {
-					List<Consulta> consultas = consultaDao.buscarAgendaCliente(usuarioSessao.getId());
-					request.setAttribute("consultas", consultas);
-				} else {
-					List<Consulta> consultas = consultaDao.buscarMinhaAgenda(usuarioSessao.getId());
-					request.setAttribute("consultas", consultas);
-				}
 				
+				List<Consulta> consultas = consultaDao.buscarMinhaAgendaOrdenadaData(usuarioSessao.getId());
+				if(usuarioSessao.getPerfil().getAdmin()) {
+					consultas = consultaDao.buscarTudo();
+				} else {
+					consultas = consultaDao.buscarAgendaCliente(usuarioSessao.getId());
+				}
+				request.setAttribute("consultas", consultas);
 				request.setAttribute("usuario", usuarioSessao);
 			}
 			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
@@ -1051,6 +1053,7 @@ public class SistemaController extends HttpServlet {
 					a.setBairro(funcionario.getBairro());
 					a.setCidade(funcionario.getCidade());
 					a.setEstado(funcionario.getEstado());
+					a.setOutroResponsavel(funcionario.getOutroResponsavel());
 					a.setPerfil(perfilDao.buscarCodigo(perfil_codigo));
 					usuarioDao.save(a);
 					String msg = "Atualização confirmada com sucesso!";
@@ -1086,6 +1089,28 @@ public class SistemaController extends HttpServlet {
 		}
 		
 		
+		@RequestMapping(value = "/pets", produces = "text/plain;charset=UTF-8", method = {RequestMethod.GET}) // Pagina de Vendas
+		public void pets(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+			String link = "pages/deslogar";
+			HttpSession session = request.getSession();
+			if(session.getAttribute("usuarioSessao") != null) {
+				Usuario usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
+				usuarioSessao = usuarioDao.findById(usuarioSessao.getId()).get();
+				request.setAttribute("usuarioSessao", usuarioSessao);
+				if(usuarioSessao.getPerfil().getFuncionario()) {
+					link = "pages/pets";
+					request.setAttribute("pets", petDao.findAll());
+					
+				} else {
+					link = "pages/home";
+					request.setAttribute("mensagem", "Você não possui permissão para essa página.");
+				}
+				
+			}
+			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
+		}
+		
+		
 		@RequestMapping(value = "/pet_{idPet}", produces = "text/plain;charset=UTF-8", method = {RequestMethod.GET}) // Pagina de Vendas
 		public void petSelecionado(HttpServletRequest request, HttpServletResponse response, Usuario funcionario, String acao, @PathVariable("idPet") Integer idPet) throws SQLException, ServletException, IOException {
 			String link = "pages/deslogar";
@@ -1096,14 +1121,18 @@ public class SistemaController extends HttpServlet {
 				request.setAttribute("usuarioSessao", usuarioSessao);
 				Pet pet = petDao.findById(idPet).get();
 				Boolean encontrado = false;
-				for(Usuario u : pet.getResponsaveis() ) {
-					if(usuarioSessao.getId() == u.getId()) {
+				
+				
+				for(Pet pts : usuarioSessao.getPet() ) {
+					if(	pts.getId()	== pet.getId()) {
 						encontrado = true;
-						break;
 					}
 				}
+				
 				if(usuarioSessao.getPerfil().getFuncionario()) {
 					encontrado = true;
+					Usuario responsavelPet = usuarioDao.buscarPet(idPet).get(0);
+					request.setAttribute("responsavelPet", responsavelPet);
 				}
 				if(encontrado) {
 					link = "pages/petSelecionado";
@@ -1129,15 +1158,24 @@ public class SistemaController extends HttpServlet {
 				request.setAttribute("usuarioSessao", usuarioSessao);
 				Boolean encontrado = false;
 				Pet pet = petDao.findById(idPet).get();
-				for(Usuario u : pet.getResponsaveis() ) {
-					if(usuarioSessao.getId() == u.getId()) {
+				for(Pet p : usuarioSessao.getPet()) {
+					if(p.getId() == pet.getId()) {
 						encontrado = true;
-						break;
 					}
 				}
 				
+				if(usuarioSessao.getPerfil().getFuncionario()) {
+					encontrado = true;
+				}
+				
 				if(encontrado) {
-					Pet petAtualizar = petDao.findById(petOriginal.getId()).get();
+					Pet petAtualizar = new Pet();
+					if(petOriginal != null && petOriginal.getId() != null) {
+						petAtualizar = petDao.findById(petOriginal.getId()).get();
+					}
+					if(petAtualizar.getId() == null ) {
+						petAtualizar = petDao.findById(idPet).get();
+					}
 					petAtualizar.setEspecie(petOriginal.getEspecie());
 					petAtualizar.setNome(petOriginal.getNome());
 					petAtualizar.setGenero(petOriginal.getGenero());
@@ -1148,9 +1186,11 @@ public class SistemaController extends HttpServlet {
 					petAtualizar.setPathImagem(petOriginal.getPathImagem());
 					petAtualizar.setObservacoes(petOriginal.getObservacoes());
 					
-					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-					LocalDateTime dateTime = LocalDateTime.parse(pet_dataNascimento+" 00:00", formatter);
-					petAtualizar.setNascimento(dateTime);
+					if(pet_dataNascimento != null) {
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+						LocalDateTime dateTime = LocalDateTime.parse(pet_dataNascimento+" 00:00", formatter);
+						petAtualizar.setNascimento(dateTime);
+					}
 					
 					List<Vacina> listaVac = new ArrayList<Vacina>();
 					System.out.println("pet_vacina: "+pet_vacina);
@@ -1166,20 +1206,11 @@ public class SistemaController extends HttpServlet {
 					
 					
 					List<Usuario> listaRes = new ArrayList<Usuario>();
-					System.out.println("pet_responsaveis: "+pet_responsaveis);
-					if(pet_responsaveis != null && !pet_responsaveis.equals("")) {
-						for(String strRes : pet_responsaveis.split(",")) {
-							Usuario r = usuarioDao.findById(Integer.parseInt(strRes)).get();
-							listaRes.add(r);
-						}
-						petAtualizar.setResponsaveis(listaRes);
-					} else {
-						request.setAttribute("mensagem", "O pet, precisa de ao menos um responsável");
-					}
+					
 					
 					if(cpf != null && !cpf.equals("")) {
 						Usuario usuAdd = usuarioDao.buscarCpf(cpf);
-						petAtualizar.getResponsaveis().add(usuAdd);
+						petAtualizar.setResponsavel(usuAdd);
 					}
 					
 					petDao.save(petAtualizar);

@@ -409,7 +409,7 @@ function redirecionar(link){
 			        <div class="row">
 						<div class="col-lg-6">
 							<c:if test="${usuarioSessao.perfil.funcionario }">
-								<input name="nomeCliente" id="nomeCliente" placeholder="Insira o nome do Cliente! *" value="" required autofocus>
+								<input name="nomeCliente" id="nomeCliente" placeholder="Insira o nome do Cliente! *" value="${usuarioSessao.nome }" required autofocus>
 							</c:if>
 							<c:if test="${!usuarioSessao.perfil.funcionario }">
 								<input name="nomeCliente" id="nomeCliente" placeholder="Insira seu nome." value="${usuarioSessao.nome }" required autofocus>
@@ -431,7 +431,7 @@ function redirecionar(link){
 				             <p>
 				                Pet: 
 				                <select class="form-control select2" id="petSelecionado" name="petSelecionado">
-					                <option>Selecione o Pet</option>
+					                <option value="0">Selecione o Pet</option>
 				                    	<c:forEach items="${usuarioSessao.pet }" var="pet">
 				                    		<option value="${pet.id }">${pet.nome }</option>
 				                    	</c:forEach>

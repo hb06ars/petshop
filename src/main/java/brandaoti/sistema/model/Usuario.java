@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -47,6 +49,9 @@ public class Usuario {
 	private LocalDate dataNascimento;
 	
 	@Column
+	private String outroResponsavel;
+	
+	@Column
 	private String telefone;
 	
 	@Column
@@ -76,8 +81,8 @@ public class Usuario {
 	@Column
 	private Date dataDeCadastro = new Date();
 	
-	@OneToMany
-	(fetch = FetchType.LAZY)
+	@ManyToMany
+	(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Pet> pet;
 
 	public Integer getId() {
@@ -238,6 +243,14 @@ public class Usuario {
 
 	public void setPet(List<Pet> pet) {
 		this.pet = pet;
+	}
+
+	public String getOutroResponsavel() {
+		return outroResponsavel;
+	}
+
+	public void setOutroResponsavel(String outroResponsavel) {
+		this.outroResponsavel = outroResponsavel;
 	}
 
 	

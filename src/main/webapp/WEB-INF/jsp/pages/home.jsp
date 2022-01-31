@@ -17,7 +17,23 @@ function redirecionar(link){
 }
 </script>
 <!-- Script -->
-									    	
+
+<c:set var = "pendentes" value = "0"/>
+<c:set var = "confirmada" value = "0"/>
+<c:set var = "recusada" value = "0"/>
+
+<c:forEach items="${consultas }" var="c">
+	<c:if test="${c.confirmado }">
+		<c:set var = "confirmada" value = "${confirmada + 1 }"/>
+	</c:if>
+	<c:if test="${c.cancelado }">
+		<c:set var = "recusada" value = "${recusada + 1 }"/>
+	</c:if>
+	<c:if test="${!c.confirmado && !c.cancelado }">
+		<c:set var = "pendentes" value = "${pendentes + 1 }"/>
+	</c:if>
+</c:forEach>
+
 <!-- start: page -->
                 <!-- Start content -->
                 <div class="content">
@@ -40,12 +56,7 @@ function redirecionar(link){
                                     </div>
                                     <div class="text-right">
                                         <h4 class="text-dark"><b class="counter">Confirmadas</b></h4>
-                                        <c:if test="${confirmada > 0 }">
-                                        	<p class="text-muted">${confirmada}</p>
-                                        </c:if>
-                                        <c:if test="${confirmada == null || confirmada == 0 }">
-                                        	<p class="text-muted">Nenhuma</p>
-                                        </c:if>
+                                        <p class="text-muted">${confirmada}</p>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -58,12 +69,7 @@ function redirecionar(link){
                                     </div>
                                     <div class="text-right">
                                     	<h4 class="text-dark"><b class="counter">Recusadas</b></h4>
-                                        <c:if test="${recusada > 0 }">
-                                        	<p class="text-muted">${recusada}</p>
-                                        </c:if>
-                                        <c:if test="${recusada == null || recusada == 0}">
-                                        	<p class="text-muted">Nenhuma</p>
-                                        </c:if>
+                                        <p class="text-muted">${recusada}</p>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -76,12 +82,7 @@ function redirecionar(link){
                                     </div>
                                     <div class="text-right">
                                         <h4 class="text-dark"><b class="counter">Pendentes</b></h4>
-                                        <c:if test="${pendentes > 0 }">
-                                        	<p class="text-muted">${pendentes }</p>
-                                        </c:if>
-                                        <c:if test="${pendentes == null || pendentes == 0}">
-                                        	<p class="text-muted">Nenhuma</p>
-                                        </c:if>
+                                        <p class="text-muted">${pendentes }</p>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -146,15 +147,7 @@ function redirecionar(link){
 														    	</c:if>
 														    </c:forEach>
 														    <br>
-														    Responsáveis: 
-														    <c:forEach items="${o.responsaveis }" var="r" varStatus="loopRes">
-														    	${r.nome }
-														    	<c:if test="${o.responsaveis.size() > 1}">
-															    	<c:if test="${(loopRes.index+1) < o.responsaveis.size()}">
-															    	,
-															    	</c:if>
-														    	</c:if>
-														    </c:forEach>
+														    Responsável: ${o.responsavel.nome }
 														    <br>
 													    </p>
 													    

@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 import brandaoti.sistema.model.Pet;
 
 public interface PetDao extends JpaRepository<Pet, Integer> {
-	@Query(" select p from Pet p inner join p.responsaveis u where p.nome = ':nome' and u.cpf = ':cpfDono' ")
+	@Query(" select p from Pet p inner join p.responsavel u where p.nome = ':nome' and u.cpf = ':cpfDono' ")
 	Pet findNome(@Param("nome") String nome, @Param("cpfDono") String cpfDono);
 }

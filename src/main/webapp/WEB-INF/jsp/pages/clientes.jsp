@@ -88,6 +88,7 @@ function cancelar(){
 	document.getElementById("estado").value = '';
 	document.getElementById("cep").value = '';
 	document.getElementById("pathImagem").value = '';
+	document.getElementById("outroResponsavel").value = '';
 
 	document.getElementById("acao").value = '';
 	document.getElementById("atualizar").style.display = "none";
@@ -118,6 +119,18 @@ function editar(id){
 			document.getElementById("estado").value = '${u.estado}';
 			document.getElementById("cep").value = '${u.cep}';
 			document.getElementById("pathImagem").value = '${u.pathImagem}';
+			document.getElementById("outroResponsavel").value = '${u.outroResponsavel}';
+			
+			var pets = 'Meus Pets:<br>';
+			var contador = 0;
+			<c:forEach items="${u.pet }" var="p" varStatus="s">
+				if(contador > 0){
+					pets = pets + ', ';
+				}
+				pets = pets + '<a href=/pet_${p.id}>${p.nome}</a>';
+				contador++;
+			</c:forEach>
+			document.getElementById("listaPets").innerHTML = pets;	
 		}
 	</c:forEach>
 
@@ -210,11 +223,15 @@ function editar(id){
 					<div class="col-md-2 form-group">
 						<input type="text" id="cep" name="cep" placeholder="99999-999" maxlength="9" minlength="9" onkeydown="javascript: fMasc( this, mCEP );" class="form-control" >
 					</div>
-					<div class="col-md-10 form-group">
+					<div class="col-md-5 form-group">
+						<input type="text" placeholder="Outro responsável" id="outroResponsavel" name="outroResponsavel" class="form-control">
+					</div>
+					<div class="col-md-5 form-group">
 						<input type="text" placeholder="Link da Foto" id="pathImagem" name="pathImagem" class="form-control">
 					</div>
 					
-					
+					<div id="listaPets" class="col-md-12 form-group">
+					</div>
 					
 					
 					<div class="col-md-2 form-group" id="salvar">

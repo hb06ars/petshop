@@ -229,6 +229,10 @@ function editar(id){
 						</div>
 					</c:if>
 					
+					<div class="col-md-4 form-group">
+						<input type="text" placeholder="Outro responsável" id="outroResponsavel" name="outroResponsavel" value="${usuarioSessao.outroResponsavel }" class="form-control">
+					</div>
+					
 					
 					<div class="col-md-2 form-group" id="atualizar" >
 						<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">

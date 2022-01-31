@@ -43,5 +43,8 @@ public interface UsuarioDao extends JpaRepository<Usuario, Integer> {
 	@Query(" select u from Usuario u where u.cpf like (:cpf)")
 	Usuario buscarCpf(@Param("cpf") String cpf);
 	
+	@Query(" select u from Usuario u inner join u.pet p where p.id = :id ")
+	List<Usuario> buscarPet(@Param("id") Integer id);
+	
 	
 }

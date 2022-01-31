@@ -221,20 +221,27 @@ function editar(id){
 					</div>
 					
 					<div class="col-md-3 form-group">
-						<label>Responsáveis:</label><br>
-						<c:forEach items="${petSelecionado.responsaveis }" var="res">
-							<input type="checkbox" checked name="pet_responsaveis" id="pet_responsaveis" value="${res.id }">
-							<label for="responsaveis"> ${res.nome }</label><br>
-						</c:forEach>
+						<label>Responsável:</label><br>
+						<c:if test="${responsavelPet != null }">
+							<label> ${petSelecionado.nome }</label><br>
+						</c:if>
+						<c:if test="${responsavelPet == null }">
+							<label> ${usuarioSessao.nome }</label><br>
+						</c:if>
+					</div>
+					<div class="col-md-3 form-group">
+						<label>Outro Responsável:</label><br>
+						<c:if test="${responsavelPet != null }">
+							<label> ${responsavelPet.outroResponsavel }</label><br>
+						</c:if>
+						<c:if test="${responsavelPet == null && usuarioSessao.outroResponsavel != null}">
+							<label> ${usuarioSessao.outroResponsavel }</label><br>
+						</c:if>
 					</div>
 					
 					
-					<c:if test="${usuarioSessao.perfil.cliente }">
-						<div class="col-md-3 form-group">
-							<label>Adicionar outro Responsável:</label><br>
-							<input type="text" placeholder="CPF" name="cpf" id="cpf" class="form-control" >
-						</div>
 					
+					<c:if test="${usuarioSessao.perfil.cliente }">
 						<div class="col-md-12 form-group" id="atualizar" >
 							<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">
 						</div>

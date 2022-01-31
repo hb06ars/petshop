@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Pet {
@@ -44,9 +44,8 @@ public class Pet {
 	(fetch = FetchType.LAZY)
 	private List<Vacina> vacina;
 	
-	@ManyToMany
-	(fetch = FetchType.LAZY)
-	private List<Usuario> responsaveis;
+	@OneToOne
+	private Usuario responsavel;
 	
 	@Column
 	private String pathImagem = "/assets/images/avatar-1.jpg";
@@ -120,12 +119,13 @@ public class Pet {
 		this.vacina = vacina;
 	}
 
-	public List<Usuario> getResponsaveis() {
-		return responsaveis;
+
+	public Usuario getResponsavel() {
+		return responsavel;
 	}
 
-	public void setResponsaveis(List<Usuario> responsaveis) {
-		this.responsaveis = responsaveis;
+	public void setResponsavel(Usuario responsavel) {
+		this.responsavel = responsavel;
 	}
 
 	public String getPathImagem() {
