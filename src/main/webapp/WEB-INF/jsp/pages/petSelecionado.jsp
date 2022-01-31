@@ -146,21 +146,35 @@ function editar(id){
 						<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
 					</div>
 					<span class="panel-title" >
-						<img src="${petSelecionado.pathImagem }" style="max-width:100px" />
-						<span style="position:relative; left:10px; top:10px" class="h1">${petSelecionado.nome }</span>
+						<c:if test="${petSelecionado != null }">
+							<img src="${petSelecionado.pathImagem }" style="max-width:100px" />
+							<span style="position:relative; left:10px; top:10px" class="h1">${petSelecionado.nome }</span>
+						</c:if>
+						<c:if test="${petSelecionado == null }">
+							<img src="/assets/images/avatar-1.jpg" style="max-width:100px" />
+							<span style="position:relative; left:10px; top:10px" class="h1">Criar novo Pet</span>
+						</c:if>
 					</span>
 				</div>
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-md-3 form-group">
-						<label>ID:</label>
-						<input type="text" placeholder="Login" name="id" id="id" class="form-control" value="${petSelecionado.id }" readonly>
-					</div>
-					<div class="col-md-3 form-group">
-						<label>Nome:</label>
-						<input type="text" placeholder="Nome" name="nome" id="nome" class="form-control" value="${petSelecionado.nome }" required>
-					</div>
+					<c:if test="${petSelecionado != null }">
+						<div class="col-md-3 form-group">
+							<label>ID:</label>
+							<input type="text" placeholder="Login" name="id" id="id" class="form-control" value="${petSelecionado.id }" readonly>
+						</div>
+						<div class="col-md-3 form-group">
+							<label>Nome:</label>
+							<input type="text" placeholder="Nome" name="nome" id="nome" class="form-control" value="${petSelecionado.nome }" required>
+						</div>
+					</c:if>
+					<c:if test="${petSelecionado == null }">
+						<div class="col-md-6 form-group">
+							<label>Nome:</label>
+							<input type="text" placeholder="Nome" name="nome" id="nome" class="form-control" value="${petSelecionado.nome }" required>
+						</div>
+					</c:if>
 					<div class="col-md-3 form-group">
 						<label>Espécie:</label>
 						<input type="text" placeholder="Espécie" name="especie" id="especie" class="form-control" value="${petSelecionado.especie }" required>
@@ -220,38 +234,51 @@ function editar(id){
 						</c:forEach>
 					</div>
 					
-					<div class="col-md-3 form-group">
-						<label>Responsável:</label><br>
-						<c:if test="${responsavelPet != null }">
-							<label> ${petSelecionado.nome }</label><br>
-						</c:if>
-						<c:if test="${responsavelPet == null }">
-							<label> ${usuarioSessao.nome }</label><br>
-						</c:if>
-					</div>
-					<div class="col-md-3 form-group">
-						<label>Outro Responsável:</label><br>
-						<c:if test="${responsavelPet != null }">
-							<label> ${responsavelPet.outroResponsavel }</label><br>
-						</c:if>
-						<c:if test="${responsavelPet == null && usuarioSessao.outroResponsavel != null}">
-							<label> ${usuarioSessao.outroResponsavel }</label><br>
-						</c:if>
-					</div>
-					
+					<c:if test="${petSelecionado != null }">
+						<div class="col-md-3 form-group">
+							<label>Responsável:</label><br>
+							<c:if test="${responsavelPet != null }">
+								<label> ${petSelecionado.nome }</label><br>
+							</c:if>
+							<c:if test="${responsavelPet == null }">
+								<label> ${usuarioSessao.nome }</label><br>
+							</c:if>
+						</div>
+						<div class="col-md-3 form-group">
+							<label>Outro Responsável:</label><br>
+							<c:if test="${responsavelPet != null }">
+								<label> ${responsavelPet.outroResponsavel }</label><br>
+							</c:if>
+							<c:if test="${responsavelPet == null && usuarioSessao.outroResponsavel != null}">
+								<label> ${usuarioSessao.outroResponsavel }</label><br>
+							</c:if>
+						</div>
+					</c:if>
 					
 					
 					<c:if test="${usuarioSessao.perfil.cliente }">
-						<div class="col-md-12 form-group" id="atualizar" >
-							<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">
-						</div>
+						<c:if test="${petSelecionado == null }">
+							<div class="col-md-12 form-group" id="atualizar" >
+								<input type="submit" class="btn btn-primary" onclick="acao('salvar')" value="Criar">
+							</div>
+						</c:if>
+						<c:if test="${petSelecionado != null }">
+							<div class="col-md-12 form-group" id="atualizar" >
+								<input type="submit" class="btn btn-primary" onclick="acao('atualizar')" value="Atualizar">
+							</div>
+						</c:if>
 						<input type="hidden" id="acao" name="acao" value="atualizar">
 					</c:if>
 				</div>
 			</div>
 		</div>
 	</div>
-	<input type="hidden" name="idPet" id="idPet" value="${petSelecionado.id }">
+	<c:if test="${petSelecionado != null }">
+		<input type="hidden" name="idPet" id="idPet" value="${petSelecionado.id }">
+	</c:if>
+	<c:if test="${petSelecionado == null }">
+		<input type="hidden" name="idPet" id="idPet" value="0">
+	</c:if>
 </form>
 
 

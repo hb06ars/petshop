@@ -1119,29 +1119,33 @@ public class SistemaController extends HttpServlet {
 				Usuario usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
 				usuarioSessao = usuarioDao.findById(usuarioSessao.getId()).get();
 				request.setAttribute("usuarioSessao", usuarioSessao);
-				Pet pet = petDao.findById(idPet).get();
-				Boolean encontrado = false;
-				
-				
-				for(Pet pts : usuarioSessao.getPet() ) {
-					if(	pts.getId()	== pet.getId()) {
-						encontrado = true;
+				if(idPet > 0) {
+					Pet pet = petDao.findById(idPet).get();
+					Boolean encontrado = false;
+					for(Pet pts : usuarioSessao.getPet() ) {
+						if(	pts.getId()	== pet.getId()) {
+							encontrado = true;
+						}
 					}
-				}
-				
-				if(usuarioSessao.getPerfil().getFuncionario()) {
-					encontrado = true;
-					Usuario responsavelPet = usuarioDao.buscarPet(idPet).get(0);
-					request.setAttribute("responsavelPet", responsavelPet);
-				}
-				if(encontrado) {
+					if(usuarioSessao.getPerfil().getFuncionario()) {
+						encontrado = true;
+						Usuario responsavelPet = usuarioDao.buscarPet(idPet).get(0);
+						request.setAttribute("responsavelPet", responsavelPet);
+					}
+					if(encontrado) {
+						link = "pages/petSelecionado";
+						request.setAttribute("vacinas", vacinaDao.findAll());
+						request.setAttribute("petSelecionado", pet);
+					} else {
+							request.setAttribute("mensagem", "O pet não corresponde ao seu login.");
+							link = "pages/home";
+					}
+				} else {
+					// Novo
 					link = "pages/petSelecionado";
 					request.setAttribute("vacinas", vacinaDao.findAll());
-					request.setAttribute("petSelecionado", pet);
-				} else {
-						request.setAttribute("mensagem", "O pet não corresponde ao seu login.");
-						link = "pages/home";
 				}
+				
 			}
 			//JSP que irá acessar.
 			request.getRequestDispatcher("/WEB-INF/jsp/"+link+".jsp").forward(request, response); //retorna a variavel
@@ -1156,69 +1160,100 @@ public class SistemaController extends HttpServlet {
 				Usuario usuarioSessao = (Usuario) session.getAttribute("usuarioSessao");
 				usuarioSessao = usuarioDao.findById(usuarioSessao.getId()).get();
 				request.setAttribute("usuarioSessao", usuarioSessao);
-				Boolean encontrado = false;
-				Pet pet = petDao.findById(idPet).get();
-				for(Pet p : usuarioSessao.getPet()) {
-					if(p.getId() == pet.getId()) {
+				if(idPet > 0) {
+					Boolean encontrado = false;
+					Pet pet = petDao.findById(idPet).get();
+					for(Pet p : usuarioSessao.getPet()) {
+						if(p.getId() == pet.getId()) {
+							encontrado = true;
+						}
+					}
+					if(usuarioSessao.getPerfil().getFuncionario()) {
 						encontrado = true;
 					}
-				}
-				
-				if(usuarioSessao.getPerfil().getFuncionario()) {
-					encontrado = true;
-				}
-				
-				if(encontrado) {
-					Pet petAtualizar = new Pet();
-					if(petOriginal != null && petOriginal.getId() != null) {
-						petAtualizar = petDao.findById(petOriginal.getId()).get();
+					if(encontrado) {
+						Pet petAtualizar = new Pet();
+						if(petOriginal != null && petOriginal.getId() != null) {
+							petAtualizar = petDao.findById(petOriginal.getId()).get();
+						}
+						if(petAtualizar.getId() == null ) {
+							petAtualizar = petDao.findById(idPet).get();
+						}
+						petAtualizar.setEspecie(petOriginal.getEspecie());
+						petAtualizar.setNome(petOriginal.getNome());
+						petAtualizar.setGenero(petOriginal.getGenero());
+						petAtualizar.setRaca(petOriginal.getRaca());
+						petAtualizar.setPeso(petOriginal.getPeso());
+						petAtualizar.setCastracao(petOriginal.getCastracao());
+						petAtualizar.setNascimento(petOriginal.getNascimento());
+						petAtualizar.setPathImagem(petOriginal.getPathImagem());
+						petAtualizar.setObservacoes(petOriginal.getObservacoes());
+						
+						if(pet_dataNascimento != null) {
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+							LocalDateTime dateTime = LocalDateTime.parse(pet_dataNascimento+" 00:00", formatter);
+							petAtualizar.setNascimento(dateTime);
+						}
+						
+						List<Vacina> listaVac = new ArrayList<Vacina>();
+						System.out.println("pet_vacina: "+pet_vacina);
+						if(pet_vacina != null && !pet_vacina.equals("")) {
+							for(String strVac : pet_vacina.split(",")) {
+								Vacina v = vacinaDao.findById(Integer.parseInt(strVac)).get();
+								listaVac.add(v);
+							}
+							petAtualizar.setVacina(listaVac);
+						} else {
+							petAtualizar.setVacina(listaVac);
+						}
+						List<Usuario> listaRes = new ArrayList<Usuario>();
+						if(cpf != null && !cpf.equals("")) {
+							Usuario usuAdd = usuarioDao.buscarCpf(cpf);
+							petAtualizar.setResponsavel(usuAdd);
+						}
+						petDao.save(petAtualizar);
+						response.sendRedirect("/pet_"+idPet);
+					} else {
+						response.sendRedirect("/deslogar");
 					}
-					if(petAtualizar.getId() == null ) {
-						petAtualizar = petDao.findById(idPet).get();
-					}
-					petAtualizar.setEspecie(petOriginal.getEspecie());
-					petAtualizar.setNome(petOriginal.getNome());
-					petAtualizar.setGenero(petOriginal.getGenero());
-					petAtualizar.setRaca(petOriginal.getRaca());
-					petAtualizar.setPeso(petOriginal.getPeso());
-					petAtualizar.setCastracao(petOriginal.getCastracao());
-					petAtualizar.setNascimento(petOriginal.getNascimento());
-					petAtualizar.setPathImagem(petOriginal.getPathImagem());
-					petAtualizar.setObservacoes(petOriginal.getObservacoes());
+				} else {
+					//Criar novo
+					Pet petCriar = new Pet();
+					petCriar.setEspecie(petOriginal.getEspecie());
+					petCriar.setNome(petOriginal.getNome());
+					petCriar.setGenero(petOriginal.getGenero());
+					petCriar.setRaca(petOriginal.getRaca());
+					petCriar.setPeso(petOriginal.getPeso());
+					petCriar.setCastracao(petOriginal.getCastracao());
+					petCriar.setNascimento(petOriginal.getNascimento());
+					petCriar.setPathImagem(petOriginal.getPathImagem());
+					petCriar.setObservacoes(petOriginal.getObservacoes());
 					
 					if(pet_dataNascimento != null) {
 						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 						LocalDateTime dateTime = LocalDateTime.parse(pet_dataNascimento+" 00:00", formatter);
-						petAtualizar.setNascimento(dateTime);
+						petCriar.setNascimento(dateTime);
 					}
 					
 					List<Vacina> listaVac = new ArrayList<Vacina>();
-					System.out.println("pet_vacina: "+pet_vacina);
 					if(pet_vacina != null && !pet_vacina.equals("")) {
 						for(String strVac : pet_vacina.split(",")) {
 							Vacina v = vacinaDao.findById(Integer.parseInt(strVac)).get();
 							listaVac.add(v);
 						}
-						petAtualizar.setVacina(listaVac);
+						petCriar.setVacina(listaVac);
 					} else {
-						petAtualizar.setVacina(listaVac);
+						petCriar.setVacina(listaVac);
 					}
+					petCriar.setResponsavel(usuarioSessao);
+					petDao.save(petCriar);
 					
+					usuarioSessao.getPet().add(petCriar);
+					usuarioDao.save(usuarioSessao);
 					
-					List<Usuario> listaRes = new ArrayList<Usuario>();
-					
-					
-					if(cpf != null && !cpf.equals("")) {
-						Usuario usuAdd = usuarioDao.buscarCpf(cpf);
-						petAtualizar.setResponsavel(usuAdd);
-					}
-					
-					petDao.save(petAtualizar);
-					
-					response.sendRedirect("/pet_"+idPet);
-				} else {
-					response.sendRedirect("/deslogar");
+					response.sendRedirect("/meus_pets");
 				}
+				
 			} else {
 				response.sendRedirect("/");
 			}

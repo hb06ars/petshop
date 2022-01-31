@@ -153,10 +153,14 @@ function editar(id){
 				<div class="row">
 					<c:forEach items="${usuarioSessao.pet }" var="pts">
 						<div onclick="redirecionar('/pet_${pts.id }')" class="col-md-4 form-group">
-							<img src="${pts.pathImagem }" style="max-width:150px; cursor:pointer"/>
+							<img src="${pts.pathImagem }" style="max-width:150px; min-width:150px; cursor:pointer"/>
 							<h3 style="cursor:pointer" >${pts.nome }</h3>
 						</div>
 					</c:forEach>
+					<div onclick="redirecionar('/pet_0')" class="col-md-4 form-group">
+						<img src="/assets/images/avatar-1.jpg" style="max-width:150px; min-width:150px; cursor:pointer"/>
+						<h3 style="cursor:pointer" >Criar Novo</h3>
+					</div>
 				</div>
 			</div>
 		</div>
